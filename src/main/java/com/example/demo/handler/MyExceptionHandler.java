@@ -1,5 +1,6 @@
 package com.example.demo.handler;
 
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -16,7 +17,10 @@ import com.example.demo.exception.MyException;
 import com.example.demo.util.JsonUtil;
 import com.example.demo.vo.ResultVO;
 
+import lombok.extern.slf4j.Slf4j;
+
 @ControllerAdvice
+@Slf4j
 public class MyExceptionHandler {
 
 	private boolean isJson(HttpServletRequest request) {
@@ -34,6 +38,8 @@ public class MyExceptionHandler {
 	// 这个可以 同时处理 页面数据 以及 json数据
 	@ExceptionHandler(value = MyException.class)
 	public Object errorHandler(HttpServletRequest request, MyException ex, HttpServletResponse response) {
+		log.info("ExceptionHandler........");
+		
 		if (isJson(request)) {
 			response.setHeader("Content-Type", "application/json;charset=UTF-8");
 			PrintWriter out = null;

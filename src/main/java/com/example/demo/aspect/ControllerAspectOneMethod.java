@@ -1,5 +1,7 @@
 package com.example.demo.aspect;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -11,17 +13,21 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.example.demo.dto.ControllerProcessDTO;
+import com.example.demo.exception.MyException;
 import com.example.demo.util.JsonUtil;
 import com.example.demo.vo.ResultVO;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Aspect
+//@Order(Ordered.LOWEST_PRECEDENCE)
 @Component
 @Slf4j
 public class ControllerAspectOneMethod {
@@ -75,10 +81,16 @@ public class ControllerAspectOneMethod {
 		} catch (Throwable e) {
 			end = System.currentTimeMillis();
 			processDTO.setPrcessTime(end - start);
+			if ( e instanceof MyException  ) {
+				MyException myException = (MyException) e;
+				processDTO.setResultObject(ResultVO.error(myException.getCode(), myException.getMessage()));
+			}
+			
+			
 			
 			log.info("request over with exception, result={}",  JsonUtil.toJSONString(processDTO));
 			
-			processDTO.setPrcessTime(end - start);
+			//processDTO.setPrcessTime(end - start);
 			//processDTO.setResultVO((ResultVO) result);
 			
 			throw e;
