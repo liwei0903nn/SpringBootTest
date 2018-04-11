@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,18 @@ public class Swagger2Config {
 	
 	@Value(value = "${basePackage}")
 	private String basePackage;
+	
+	@Value(value = "${title:}")
+	private String title;
+	
+	@Value(value = "${description:}")
+	private String description;
+	
+	@Value(value = "${termsOfServiceUrl:}")
+	private String termsOfServiceUrl;
+	
+	@Value(value = "${version:}")
+	private String version;
 
 	@Bean
 	public Docket createRestApi() {
@@ -30,12 +43,35 @@ public class Swagger2Config {
 	}
 	
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder()
-				.title("springboot利用swagger构建api文档")
-				.description("简单优雅的restfun风格，http://blog.csdn.net/saytime")
-				.termsOfServiceUrl("http://blog.csdn.net/saytime")
-				.version("1.0")
-				.build();
+//		return new ApiInfoBuilder()
+//				.title("springboot利用swagger构建api文档")
+//				.description("简单优雅的restfun风格，http://blog.csdn.net/saytime")
+//				.termsOfServiceUrl("http://blog.csdn.net/saytime")
+//				.version("1.0")
+//				.build();
+		
+		ApiInfoBuilder apiInfoBuilder = new ApiInfoBuilder();
+		
+//		System.out.println(title);
+//		System.out.println(description);
+		
+		if (!StringUtils.isBlank(title)) {
+			apiInfoBuilder.title(title);
+		}
+		
+		if (!StringUtils.isBlank(description)) {
+			apiInfoBuilder.description(description);
+		}
+		
+		if (!StringUtils.isBlank(termsOfServiceUrl)) {
+			apiInfoBuilder.termsOfServiceUrl(termsOfServiceUrl);
+		}
+		
+		if (!StringUtils.isBlank(version)) {
+			apiInfoBuilder.version(version);
+		}
+		
+		return apiInfoBuilder.build();
 	}
 	
 }
