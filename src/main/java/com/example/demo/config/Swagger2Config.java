@@ -1,7 +1,9 @@
 package com.example.demo.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -11,14 +13,18 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
+@PropertySource("classpath:swagger2.properties")
 public class Swagger2Config {
+	
+	@Value(value = "${basePackage}")
+	private String basePackage;
 
 	@Bean
 	public Docket createRestApi() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.apiInfo(apiInfo())
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.example.demo.controller"))
+				.apis(RequestHandlerSelectors.basePackage(basePackage))
 				.paths(PathSelectors.any())
 				.build();
 	}
