@@ -12,6 +12,8 @@ import com.example.demo.enums.MyExceptionEnum;
 import com.example.demo.exception.MyException;
 import com.example.demo.vo.ResultVO;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -20,7 +22,8 @@ public class HelloController {
 
 	@GetMapping("/hello")
 	@ResponseBody
-	public ResultVO<String> hello (String name){
+	@ApiOperation(value="hello api...... 返回  hello")
+	public ResultVO<String> hello (@ApiParam(value= "姓名") String name){
 		ResultVO result = new ResultVO<>();
 		result.setCode(0);
 		result.setMsg("ok");
